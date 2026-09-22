@@ -1,9 +1,45 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { TodoForm } from '#/components/todo-form'
+import { Button } from '#/components/ui/button'
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '#/components/ui/card'
+import { createFileRoute, Link } from '@tanstack/react-router'
+import { ArrowLeft } from 'lucide-react'
 
 export const Route = createFileRoute('/todos/new/')({
   component: RouteComponent,
 })
 
 function RouteComponent() {
-  return <div>New task</div>
+  return (
+    <div className="container space-y-2">
+      <Button
+        asChild
+        variant={'ghost'}
+        size="sm"
+        className="text-muted-foreground"
+      >
+        <Link to="/">
+          <ArrowLeft />
+          Todo List
+        </Link>
+      </Button>
+      <Card>
+        <CardHeader>
+          <CardTitle>Add New Task</CardTitle>
+          <CardDescription>
+            Create a new task to add to your todo list
+          </CardDescription>
+        </CardHeader>
+
+        <CardContent>
+          <TodoForm />
+        </CardContent>
+      </Card>
+    </div>
+  )
 }
