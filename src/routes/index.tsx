@@ -132,9 +132,9 @@ function TodoTableRow({ todo }: { todo: ITodo }) {
 
       <TableCell>
         <Button variant={'ghost'}>
-          {/* <Link to="/todos/$id/edit"> */}
-          <Edit />
-          {/* </Link> */}
+          <Link to="/todos/$id/edit" params={{ id: todo.id }}>
+            <Edit />
+          </Link>
         </Button>
         <Button variant={'ghostDestructive'}>
           <Trash />
