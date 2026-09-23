@@ -20,7 +20,7 @@ import {
 } from '#/components/ui/table'
 import { db } from '#/db'
 import { todos } from '#/db/schema'
-import type { ITodo } from '#/defnitions/todo'
+import type { ITodo } from '#/definitions/todo'
 import { createFileRoute, Link, useRouter } from '@tanstack/react-router'
 import { createServerFn, useServerFn } from '@tanstack/react-start'
 import { cn } from 'cn'
