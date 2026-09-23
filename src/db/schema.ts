@@ -4,8 +4,8 @@ export const todos = pgTable('todos', {
   id: uuid('id').primaryKey().defaultRandom(),
   name: text('name').notNull(),
   isComplete: boolean().notNull(),
-  createAt: timestamp({ withTimezone: true }).defaultNow().notNull(),
-  updateAt: timestamp({ withTimezone: true })
+  createdAt: timestamp({ withTimezone: true }).defaultNow().notNull(),
+  updatedAt: timestamp({ withTimezone: true })
     .defaultNow()
     .notNull()
     .$onUpdate(() => new Date()),
