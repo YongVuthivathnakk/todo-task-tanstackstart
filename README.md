@@ -1,223 +1,214 @@
-Welcome to your new TanStack Start app!
+# Todo Task TanStack
 
-# Getting Started
+A learning-focused Todo application built to understand how TanStack Start works in practice with Drizzle ORM, PostgreSQL, and Docker for local development.
 
-To run this application:
+This project demonstrates a full-stack flow using:
+
+- TanStack Start
+- TanStack Router
+- React
+- Drizzle ORM
+- PostgreSQL
+- Docker Compose
+- Tailwind-based UI
+
+This project was created for learning and is inspired by the tutorial: https://youtu.be/KsHbs5RMVYU
+
+## Overview
+
+The goal of this project is to explore the basics of TanStack Start while building a small todo app that stores data in a Postgres database. It covers the interaction between routing, server functions, and database access in a modern full-stack app.
+
+## Tech stack
+
+- React 19
+- TanStack Router
+- TanStack Start
+- TypeScript
+- Drizzle ORM
+- PostgreSQL 17
+- Docker Compose
+- Vite
+- Tailwind CSS
+
+## Project structure
+
+```bash
+.
+├── docker-compose.yml
+├── drizzle.config.ts
+├── package.json
+├── src/
+│   ├── components/
+│   ├── db/
+│   ├── defnitions/
+│   ├── lib/
+│   ├── routes/
+│   ├── router.tsx
+│   ├── routeTree.gen.ts
+│   └── styles.css
+├── public/
+├── tsconfig.json
+├── vite.config.ts
+├── README.md
+└── .env.local
+```
+
+## Prerequisites
+
+Make sure the following are installed:
+
+- Node.js
+- Bun
+- Docker Desktop or Docker Engine
+
+## Environment setup
+
+Create a `.env.local` file in the project root with the following values:
+
+```env
+DB_HOST=localhost
+DB_PORT=5432
+DB_USER=postgres
+DB_PASSWORD=postgres
+DB_NAME=todo_db
+DATABASE_URL=postgresql://postgres:postgres@localhost:5432/todo_db
+```
+
+These values match the database configuration in `docker-compose.yml`.
+
+## Start the database
+
+```bash
+docker compose up -d
+```
+
+This starts a PostgreSQL container in Docker for local development.
+
+## Install dependencies
 
 ```bash
 bun install
-bun --bun run dev
 ```
 
-# Building For Production
-
-To build this application for production:
+## Run the app
 
 ```bash
-bun --bun run build
+bun run dev
 ```
 
-## Styling
+Open the app in the browser at:
 
-This project uses [Tailwind CSS](https://tailwindcss.com/) for styling.
+```text
+http://localhost:3000
+```
 
-### Removing Tailwind CSS
+## Database commands
 
-If you prefer not to use Tailwind CSS:
+This project uses Drizzle for managing the database schema.
 
-1. Remove the demo pages in `src/routes/demo/`
-2. Replace the Tailwind import in `src/styles.css` with your own styles
-3. Remove `tailwindcss()` from the plugins array in `vite.config.ts`
-4. Remove `@tailwindcss/vite` and `tailwindcss` from `package.json`
-
-## Linting & Formatting
-
-
-This project uses [eslint](https://eslint.org/) and [prettier](https://prettier.io/) for linting and formatting. Eslint is configured using [tanstack/eslint-config](https://tanstack.com/config/latest/docs/eslint). The following scripts are available:
+### Generate schema migration files
 
 ```bash
-bun --bun run lint
-bun --bun run format
-bun --bun run check
+bun run db:generate
 ```
 
-
-## Deploy to Vercel
-
-1. Push this repo to GitHub, GitLab, or Bitbucket
-2. In Vercel, choose **Add New > Project** and import the repo
-3. Keep the detected TanStack Start framework settings
-4. Add production values from `.env.example` under **Settings > Environment Variables**
-5. Deploy
-
-Vercel runs the build script and deploys Nitro's output as Vercel Functions and
-static assets. The included `vercel.json` makes framework detection explicit.
-
-Variables prefixed with `VITE_` are included in the browser bundle. Keep secrets
-unprefixed so they remain server-only.
-
-
-## Shadcn
-
-Add components using the latest version of [Shadcn](https://ui.shadcn.com/).
+### Push schema directly to the database
 
 ```bash
-pnpm dlx shadcn@latest add button
+bun run db:push
 ```
 
+### Run migrations
 
-
-## Routing
-
-This project uses [TanStack Router](https://tanstack.com/router) with file-based routing. Routes are managed as files in `src/routes`.
-
-### Adding A Route
-
-To add a new route to your application just add a new file in the `./src/routes` directory.
-
-TanStack will automatically generate the content of the route file for you.
-
-Now that you have two routes you can use a `Link` component to navigate between them.
-
-### Adding Links
-
-To use SPA (Single Page Application) navigation you will need to import the `Link` component from `@tanstack/react-router`.
-
-```tsx
-import { Link } from "@tanstack/react-router";
+```bash
+bun run db:migrate
 ```
 
-Then anywhere in your JSX you can use it like so:
+### Open Drizzle Studio
 
-```tsx
-<Link to="/about">About</Link>
+```bash
+bun run db:studio
 ```
 
-This will create a link that will navigate to the `/about` route.
+## Features
 
-More information on the `Link` component can be found in the [Link documentation](https://tanstack.com/router/v1/docs/framework/react/api/router/linkComponent).
+The app includes the following functionality:
 
-### Using A Layout
+- View todo list
+- Add a new todo
+- Edit an existing todo
+- Mark todo as complete/incomplete
+- Delete a todo
 
-In the File Based Routing setup the layout is located in `src/routes/__root.tsx`. Anything you add to the root route will appear in all the routes. The route content will appear in the JSX where you render `{children}` in the `shellComponent`.
+## Core database model
 
-Here is an example layout that includes a header:
+The main table is defined in `src/db/schema.ts`:
 
-```tsx
-import { HeadContent, Scripts, createRootRoute } from '@tanstack/react-router'
-
-export const Route = createRootRoute({
-  head: () => ({
-    meta: [
-      { charSet: 'utf-8' },
-      { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { title: 'My App' },
-    ],
-  }),
-  shellComponent: ({ children }) => (
-    <html lang="en">
-      <head>
-        <HeadContent />
-      </head>
-      <body>
-        <header>
-          <nav>
-            <Link to="/">Home</Link>
-            <Link to="/about">About</Link>
-          </nav>
-        </header>
-        {children}
-        <Scripts />
-      </body>
-    </html>
-  ),
+```ts
+export const todos = pgTable('todos', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  name: text('name').notNull(),
+  isComplete: boolean().notNull(),
+  createdAt: timestamp({ withTimezone: true }).defaultNow().notNull(),
+  updatedAt: timestamp({ withTimezone: true })
+    .defaultNow()
+    .notNull()
+    .$onUpdate(() => new Date()),
 })
 ```
 
-More information on layouts can be found in the [Layouts documentation](https://tanstack.com/router/latest/docs/framework/react/guide/routing-concepts#layouts).
+## Learning notes
 
-## Server Functions
+This project is useful for understanding:
 
-TanStack Start provides server functions that allow you to write server-side code that seamlessly integrates with your client components.
+- TanStack Start project structure
+- File-based routing with TanStack Router
+- Using server functions for database operations
+- Connecting a React app to PostgreSQL using Drizzle ORM
+- Running a local development database with Docker
 
-```tsx
-import { createServerFn } from '@tanstack/react-start'
+## Common scripts
 
-const getServerTime = createServerFn({
-  method: 'GET',
-}).handler(async () => {
-  return new Date().toISOString()
-})
-
-// Use in a component
-function MyComponent() {
-  const [time, setTime] = useState('')
-  
-  useEffect(() => {
-    getServerTime().then(setTime)
-  }, [])
-  
-  return <div>Server time: {time}</div>
-}
+```bash
+bun run lint
+bun run format
+bun run check
+bun run build
 ```
 
-## API Routes
+## Troubleshooting
 
-You can create API routes by using the `server` property in your route definitions:
+### Database connection issues
 
-```tsx
-import { createFileRoute } from '@tanstack/react-router'
-import { json } from '@tanstack/react-start'
+Check that:
 
-export const Route = createFileRoute('/api/hello')({
-  server: {
-    handlers: {
-      GET: () => json({ message: 'Hello, World!' }),
-    },
-  },
-})
+- Docker is running
+- `.env.local` matches `docker-compose.yml`
+- Postgres is listening on `localhost:5432`
+- `DATABASE_URL` is correct
+
+### App is not starting
+
+Try:
+
+```bash
+bun install
+bun run dev
 ```
 
-## Data Fetching
+If the database has not been initialized yet:
 
-There are multiple ways to fetch data in your application. You can use TanStack Query to fetch data from a server. But you can also use the `loader` functionality built into TanStack Router to load the data for a route before it's rendered.
-
-For example:
-
-```tsx
-import { createFileRoute } from '@tanstack/react-router'
-
-export const Route = createFileRoute('/people')({
-  loader: async () => {
-    const response = await fetch('https://swapi.dev/api/people')
-    return response.json()
-  },
-  component: PeopleComponent,
-})
-
-function PeopleComponent() {
-  const data = Route.useLoaderData()
-  return (
-    <ul>
-      {data.results.map((person) => (
-        <li key={person.name}>{person.name}</li>
-      ))}
-    </ul>
-  )
-}
+```bash
+docker compose up -d
+bun run db:push
 ```
 
-Loaders simplify your data fetching logic dramatically. Check out more information in the [Loader documentation](https://tanstack.com/router/latest/docs/framework/react/guide/data-loading#loader-parameters).
+## Credit
 
+This project is based on the educational content from:
 
-# Demo files
+https://youtu.be/KsHbs5RMVYU
 
-Files prefixed with `demo` can be safely deleted. They are there to provide a starting point for you to play around with the features you've installed.
+## Conclusion
 
-
-# Learn More
-
-You can learn more about all of the offerings from TanStack in the [TanStack documentation](https://tanstack.com).
-
-For TanStack Start specific documentation, visit [TanStack Start](https://tanstack.com/start).
-# todo-task-tanstackstart
+This repository is a practical example of building a small full-stack app with TanStack Start and integrating it with a PostgreSQL database via Drizzle, all while using Docker for local development.
